@@ -13,6 +13,7 @@ import LoginForm from './LoginForm';
 import Conference from './Conference';
 import { HMSClient, HMSPeer, HMSClientConfig } from '@100mslive/hmsvideo-web';
 import { dependencies } from '../package.json';
+import Whiteboard from './Whiteboard';
 
 const sdkVersion = dependencies['@100mslive/hmsvideo-web'].substring(1);
 console.info(
@@ -42,6 +43,7 @@ class App extends React.Component {
       localAudioEnabled: true,
       localVideoEnabled: true,
       screenSharingEnabled: false,
+      isWhiteboardOpen: false,
       collapsed: true,
       isFullScreen: false,
       vidFit: false,
@@ -173,6 +175,10 @@ class App extends React.Component {
     });
 
     client.on('broadcast', (room, peer, message) => {
+      if(message.hasOwnProperty('isWhiteboard')) {
+        this.setState({ isWhiteboardOpen: message.isWhiteboard });
+        return;
+      }
       console.log('broadcast: ', room, peer.name, message);
       this._onMessageReceived(peer.name, message);
     });
@@ -371,6 +377,18 @@ class App extends React.Component {
     this.setState({ messages });
   };
 
+  _handleMiro = () => {
+    this.setState({ isWhiteboardOpen: true });
+    const info = { senderName: this.state.loginInfo.displayName, msg: { isWhiteboard: true }};
+    this.client.broadcast(info, this.client.rid);
+  }
+
+  _closeMiro = () => {
+    this.setState({ isWhiteboardOpen: false });
+    const info = { senderName: this.state.loginInfo.displayName, msg: { isWhiteboard: false }};
+    this.client.broadcast(info, this.client.rid);
+  }
+
   render() {
     const {
       login,
@@ -380,6 +398,7 @@ class App extends React.Component {
       screenSharingEnabled,
       collapsed,
       vidFit,
+      isWhiteboardOpen
     } = this.state;
     return (
       <Layout className="app-layout">
@@ -425,7 +444,8 @@ class App extends React.Component {
                   />
                 </div>
               </Sider>
-              <Layout className="app-right-layout">
+              <Layout className={`app-right-layout ${isWhiteboardOpen ? 'whiteboard': ''}`}>
+                <Whiteboard show={isWhiteboardOpen} onClose={this._closeMiro}/>
                 <Content style={{ flex: 1, position: 'relative' }}>
                   <div>
                     <Conference
@@ -436,6 +456,7 @@ class App extends React.Component {
                       settings={this._settings}
                       localAudioEnabled={localAudioEnabled}
                       localVideoEnabled={localVideoEnabled}
+                      isWhiteboardOpen={isWhiteboardOpen}
                       vidFit={vidFit}
                       loginInfo={this.state.loginInfo}
                       ref={ref => {
@@ -445,6 +466,7 @@ class App extends React.Component {
                       onScreenToggle={() =>
                         this._handleScreenSharing(!screenSharingEnabled)
                       }
+                      onWhiteboard={this._handleMiro}
                       onLeave={this._handleLeave}
                       onChatToggle={() =>
                         this._openOrCloseLeftContainer(!collapsed)

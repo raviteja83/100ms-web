@@ -319,7 +319,7 @@ class Conference extends React.Component {
       localStream,
       localScreen,
       audioMuted,
-      videoMuted,
+      videoMuted
     } = this.state;
     const id = client.uid;
     let videoCount = streams.length;
@@ -380,8 +380,10 @@ class Conference extends React.Component {
             this.muteMediaTrack('video', this.state.videoMuted);
           }}
           onChatToggle={this.props.onChatToggle}
+          onWhiteboard={this.props.onWhiteboard}
           isChatOpen={this.props.isChatOpen}
           loginInfo={this.props.loginInfo}
+          isWhiteboardOpen={this.props.isWhiteboardOpen}
         />
         {this.state.localStreamError && (
           <Modal

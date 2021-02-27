@@ -8,6 +8,7 @@ import PhoneHangupIcon from 'mdi-react/PhoneHangupIcon';
 import TelevisionIcon from 'mdi-react/TelevisionIcon';
 import TelevisionOffIcon from 'mdi-react/TelevisionOffIcon';
 import VideoCheckIcon from 'mdi-react/VideoCheckIcon';
+import NotebookIcon from 'mdi-react/NotebookIcon';
 import ToolShare from '../../ToolShare';
 
 const Controls = ({
@@ -15,12 +16,14 @@ const Controls = ({
   isScreenSharing,
   isCameraOn,
   isChatOpen,
+  isWhiteboardOpen,
   onScreenToggle,
   onMicToggle,
   onCamToggle,
   onLeave,
   onChatToggle,
   loginInfo,
+  onWhiteboard
 }) => {
   return (
     <div
@@ -61,6 +64,15 @@ const Controls = ({
           label="Screen"
           isActive={isScreenSharing}
           onClick={onScreenToggle}
+        />
+      </div>
+      <div className="mx-1">
+        <ControlButton
+          icon={<NotebookIcon className="text-indigo-100" />}
+          activeIcon={<NotebookIcon className="text-red-100" />}
+          label="Miro"
+          isActive={isWhiteboardOpen}
+          onClick={onWhiteboard}
         />
       </div>
       <div className="mx-1">
