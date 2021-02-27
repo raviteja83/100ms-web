@@ -466,7 +466,7 @@ class App extends React.Component {
                       onScreenToggle={() =>
                         this._handleScreenSharing(!screenSharingEnabled)
                       }
-                      onWhiteboard={this._handleMiro}
+                      onWhiteboard={isWhiteboardOpen ? this._handleMiro: this._closeMiro}
                       onLeave={this._handleLeave}
                       onChatToggle={() =>
                         this._openOrCloseLeftContainer(!collapsed)
