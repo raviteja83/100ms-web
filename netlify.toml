@@ -1,4 +1,5 @@
-[build.environment]
+[build]
+ environment = {
   HMS_ENDPOINT='wss://prod-in.100ms.live'
   TOKEN_ENDPOINT='https://ms-services-djl9mbcew00y.runkit.sh/'
 
@@ -10,3 +11,4 @@
   FIREBASE_MESSAGING_ID=<firebaseConfig.messagingSenderId>
   FIREBASE_APP_ID=<firebaseConfig.appId>
   FIREBASE_MEASUREMENT_ID=<firebaseConfig.measurementId>
+}
